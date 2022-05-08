@@ -33,6 +33,7 @@ RUN apt-get install -y --no-install-recommends \
       git \
       locales \
       libssl-dev \
+      libffi-dev \
       vim \
       rsync \
       bsdmainutils \
@@ -72,10 +73,17 @@ ENV TERM xterm-256color
 
 RUN mkdir toolschest
 # Install python packages
-RUN pip install keystone-engine unicorn capstone ropper keystone-engine
+RUN pip install --upgrade pwntools keystone-engine unicorn capstone \
+  ropper keystone-engine binwalk
 # Install GEF
 RUN cd toolschest && git clone https://github.com/hugsy/gef.git && \
   cd gef && echo "source ${PWD}/gef.py" >> ~/.gdbinit && cd ~
+# Install Go
+COPY scripts/install/go_install.sh /tmp/go_install.sh
+RUN sudo chmod 744 /tmp/go_install.sh && \
+  sudo /tmp/go_install.sh && \
+  sudo rm /tmp/go_install.sh
+ENV PATH=/usr/local/go/bin:${PATH}
 
 ENTRYPOINT ["revexp_entrypoint.sh"]
 
