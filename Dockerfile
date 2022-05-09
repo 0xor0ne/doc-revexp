@@ -84,6 +84,10 @@ RUN sudo chmod 744 /tmp/go_install.sh && \
   sudo /tmp/go_install.sh && \
   sudo rm /tmp/go_install.sh
 ENV PATH=/usr/local/go/bin:${PATH}
+# Install Rust
+RUN curl https://sh.rustup.rs -sSf | \
+  sh -s -- --default-toolchain stable -y
+ENV PATH=/root/.cargo/bin:$PATH
 
 ENTRYPOINT ["revexp_entrypoint.sh"]
 

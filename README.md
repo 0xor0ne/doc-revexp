@@ -5,6 +5,7 @@ development activities.
 
 ## Included tools
 
-* gdb with [GEF](https://github.com/hugsy/gef).
-* [pwntools](https://github.com/Gallopsled/pwntools).
+* gdb with [GEF](https://github.com/hugsy/gef)
+* [pwntools](https://github.com/Gallopsled/pwntools)
 * [Golang](https://go.dev/)
+* [Rust](https://www.rust-lang.org/)
