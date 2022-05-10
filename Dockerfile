@@ -27,6 +27,10 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -y
 RUN apt-get install -y --no-install-recommends \
       build-essential \
+      pkg-config \
+      bison \
+      flex \
+      cmake \
       gdb \
       gdb-multiarch \
       python3 python3-pip \
@@ -39,6 +43,8 @@ RUN apt-get install -y --no-install-recommends \
       bsdmainutils \
       strace \
       curl \
+      wget \
+      unzip \
       file \
       procps \
       sudo
@@ -68,11 +74,12 @@ RUN mkdir ${workspace_dir} && chown -R ${user}:${user} ${workspace_dir}
 
 USER ${user}
 WORKDIR /home/${user}/
+RUN mkdir toolschest
 ENV LC_ALL en_US.UTF-8
 ENV TERM xterm-256color
 
-RUN mkdir toolschest
 # Install python packages
+ENV PATH=/home/${user}/.local/bin:${PATH}
 RUN pip install --upgrade pwntools keystone-engine unicorn capstone \
   ropper keystone-engine binwalk
 # Install GEF
@@ -87,7 +94,24 @@ ENV PATH=/usr/local/go/bin:${PATH}
 # Install Rust
 RUN curl https://sh.rustup.rs -sSf | \
   sh -s -- --default-toolchain stable -y
-ENV PATH=/root/.cargo/bin:$PATH
+ENV PATH=/home/${user}/.cargo/bin:$PATH
+# Install radare2
+RUN cd toolschest && \
+  git clone https://github.com/radareorg/radare2.git && \
+  cd ~
+RUN ./toolschest/radare2/sys/install.sh
+RUN pip3 install -U r2env && \
+  r2env init && \
+  r2env add radare2@git
+ENV PATH=/home/${user}/.r2env/bin:$PATH
+RUN pip3 install r2pipe
+RUN r2pm update && \
+  cd /home/${user}/.local/share/radare2/r2pm/git/ && \
+  git clone https://github.com/radareorg/r2ghidra.git && \
+  cd r2ghidra && \
+  git checkout `git describe --tags --abbrev=0` && \
+  r2pm -i r2ghidra
+
 
 ENTRYPOINT ["revexp_entrypoint.sh"]
 

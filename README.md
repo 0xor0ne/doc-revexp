@@ -6,6 +6,8 @@ development activities.
 ## Included tools
 
 * gdb with [GEF](https://github.com/hugsy/gef)
-* [pwntools](https://github.com/Gallopsled/pwntools)
 * [Golang](https://go.dev/)
+* [pwntools](https://github.com/Gallopsled/pwntools)
+* [radare2](https://github.com/radareorg/radare2)
+  * [r2ghidra](https://github.com/radareorg/r2ghidra) plugin
 * [Rust](https://www.rust-lang.org/)
