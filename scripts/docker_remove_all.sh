@@ -28,8 +28,5 @@ ${SCRIPT_DIR}/docker_remove_image.sh
 echo "Removing volume"
 ${SCRIPT_DIR}/docker_remove_volume.sh
 
-echo "Resetting builder ID"
-echo -n "default" > ${ROOT_DIR}/.id
-
 # echo "Removing the content of ${SHARED_DIR}"
 # rm -rf ${ROOT_DIR}/${SHARED_DIR}/*

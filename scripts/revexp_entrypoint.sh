@@ -24,10 +24,12 @@ if [ -f "${WSDIR}/.init" ] ; then
   sudo chown -R $(whoami):$(whoami) ${WSDIR}
   cd ${WSDIR}
 
-  echo "Moving revexp_env to $(pwd)"
-  cp /revexp_env .
+  # echo "Moving revexp_env to $(pwd)"
+  # cp /revexp_env .
 
-  rm -f .init
+  if [ -f ".init" ] ; then
+    rm -f .init
+  fi
 fi
 
 popd

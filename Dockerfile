@@ -111,7 +111,13 @@ RUN r2pm update && \
   cd r2ghidra && \
   git checkout `git describe --tags --abbrev=0` && \
   r2pm -i r2ghidra
-
+# Install qiling
+RUN cd toolschest && \
+  git clone https://github.com/qilingframework/qiling && \
+  cd qiling \
+  git checkout `git describe --tags --abbrev=0` && \
+  git submodule update --init --recursive && \
+  sudo pip3 install .
 
 ENTRYPOINT ["revexp_entrypoint.sh"]
 

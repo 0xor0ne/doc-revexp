@@ -23,9 +23,7 @@ source_env
 
 DOCKFILE=${ROOT_DIR}/Dockerfile
 
-BID=`get_builder_id ${ROOT_DIR}/${ID_FILE}`
-
-docker build -f ${DOCKFILE} -t ${DOCKER_IMG_NAME}-${BID} \
+docker build -f ${DOCKFILE} -t ${DOCKER_IMG_NAME} \
   --build-arg user=${DOCKER_USER} \
   --build-arg root_password=${DOCKER_IMG_ROOT_PW} \
   --build-arg workspace_dir=/home/${DOCKER_USER}/${VOLUME_DEST} \

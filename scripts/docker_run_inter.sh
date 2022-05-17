@@ -39,7 +39,7 @@ if [ "${IS_RUNNING}" != "${DOCKER_CONTAINER_NAME}-${BID}" ] ; then
     --name ${DOCKER_CONTAINER_NAME}-${BID} \
     --mount "type=volume,src=${VOLN},dst=/home/${DOCKER_USER}/${VOLUME_DEST}" \
     -v ${ROOT_DIR}/shared:${SHARED_DIR} \
-    ${DOCKER_IMG_NAME}-${BID} \
+    ${DOCKER_IMG_NAME} \
     ${args}
 else
   docker exec -it \
