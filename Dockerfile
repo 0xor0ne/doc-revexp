@@ -118,6 +118,17 @@ RUN cd toolschest && \
   git checkout `git describe --tags --abbrev=0` && \
   git submodule update --init --recursive && \
   sudo pip3 install .
+# Install ghidra
+RUN sudo apt-get install -y default-jdk
+RUN cd toolschest && wget -O ghidra.zip -c --quiet \
+  "https://github.com/$(wget -O - --quiet \
+  https://github.com/NationalSecurityAgency/ghidra/releases/latest | \
+  grep 'releases/download/' | sed 's/.*href=..//' | sed 's/".*//' | tail -1)"
+RUN cd toolschest && unzip -d ghidra-tmp ghidra.zip && \
+  mv ghidra-tmp/* ghidra && rm -rf ghidra-tmp ghidra.zip
+# Install cwe_checker
+RUN cd toolschest && git clone https://github.com/fkie-cad/cwe_checker.git && \
+  cd cwe_checker && make all GHIDRA_PATH=${HOME}/toolschest/ghidra
 
 ENTRYPOINT ["revexp_entrypoint.sh"]
 

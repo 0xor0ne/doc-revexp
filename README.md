@@ -7,6 +7,8 @@ development activities.
 ## Included tools
 
 * gdb with [GEF](https://github.com/hugsy/gef)
+* [cwe_checker](https://github.com/fkie-cad/cwe_checker)
+* [Ghidra](https://ghidra-sre.org/) for headless scripting
 * [Golang](https://go.dev/)
 * [pwntools](https://github.com/Gallopsled/pwntools)
 * [qiling](https://github.com/qilingframework/qiling)
