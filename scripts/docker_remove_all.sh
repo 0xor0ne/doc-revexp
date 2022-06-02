@@ -25,8 +25,5 @@ echo "Removing container"
 ${SCRIPT_DIR}/docker_remove_container.sh
 echo "Removing image"
 ${SCRIPT_DIR}/docker_remove_image.sh
-echo "Removing volume"
-${SCRIPT_DIR}/docker_remove_volume.sh
 
-# echo "Removing the content of ${SHARED_DIR}"
-# rm -rf ${ROOT_DIR}/${SHARED_DIR}/*
+rm ${ROOT_DIR}/${ID_FILE}

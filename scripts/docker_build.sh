@@ -23,8 +23,16 @@ source_env
 
 DOCKFILE=${ROOT_DIR}/Dockerfile
 
+# Generate new builder ID if required
+if [ "$(cat ${ROOT_DIR}/${DXB_ID_FILE})" == "default" -o \
+      ! -f ${ROOT_DIR}/${DXB_ID_FILE} ] ; then
+  TMP=`generate_builder_id`
+  echo -n ${TMP} > ${ROOT_DIR}/${DXB_ID_FILE}
+fi
+
 docker build -f ${DOCKFILE} -t ${DOCKER_IMG_NAME} \
   --build-arg user=${DOCKER_USER} \
   --build-arg root_password=${DOCKER_IMG_ROOT_PW} \
   --build-arg workspace_dir=/home/${DOCKER_USER}/${VOLUME_DEST} \
+  --build-arg qemu_tlist="${QEMU_TLIST}" \
   ${ROOT_DIR}
