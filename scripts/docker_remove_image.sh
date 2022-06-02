@@ -21,8 +21,4 @@ ROOT_DIR=${SCRIPT_DIR}/..
 source ${SCRIPT_DIR}/common.sh
 source_env
 
-DOCKFILE=${ROOT_DIR}/Dockerfile
-
-BID=`get_builder_id ${ROOT_DIR}/${ID_FILE}`
-
-docker rmi ${DOCKER_IMG_NAME}-${BID}
+docker rmi ${DOCKER_IMG_NAME}

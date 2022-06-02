@@ -25,9 +25,9 @@ function source_env {
 
 function generate_builder_id {
   if [ ! -z "$(which md5sum)" ] ; then
-    echo $RANDOM | md5sum | head -c 32
+    echo $RANDOM | md5sum | head -c 8
   elif [ ! -z "$(which md5)" ] ; then
-    echo $RANDOM | md5 | head -c 32
+    echo $RANDOM | md5 | head -c 8
   else
     echo $RANDOM
   fi

@@ -23,8 +23,32 @@ source_env
 
 DOCKFILE=${ROOT_DIR}/Dockerfile
 
+VOLN=""
+SHARED=""
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -v|--volume)
+      VOLN="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -s|--shared)
+      SHARED="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1") # save positional arg
+      shift # past argument
+      ;;
+  esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
 BID=`get_builder_id ${ROOT_DIR}/${ID_FILE}`
-VOLN="${DOCKER_VOL_NAME}-${BID}"
 
 IS_RUNNING=$(docker ps --format '{{.Names}}' | \
   grep ${DOCKER_CONTAINER_NAME}-${BID})
@@ -34,12 +58,23 @@ if [ ! "$1" = "" ] ; then
   args="$@"
 fi
 
+VOLN_MNT=""
+if [ ! -z "${VOLN}" ] ; then
+  VOLN_MNT="--mount type=volume,src=${VOLN},dst=/home/${DOCKER_USER}/${VOLUME_DEST}"
+fi
+
+SHARED_MNT="-v ${ROOT_DIR}:/home/${DOCKER_USER}/${SHARED_DIR}"
+if [ ! -z ${SHARED} ] ; then
+  SHARED_MNT="-v ${SHARED}:/home/${DOCKER_USER}/${SHARED_DIR}"
+fi
+
 if [ "${IS_RUNNING}" != "${DOCKER_CONTAINER_NAME}-${BID}" ] ; then
   docker run -it --rm \
     --name ${DOCKER_CONTAINER_NAME}-${BID} \
-    --mount "type=volume,src=${VOLN},dst=/home/${DOCKER_USER}/${VOLUME_DEST}" \
-    -v ${ROOT_DIR}/shared:${SHARED_DIR} \
-    ${DOCKER_IMG_NAME}-${BID} \
+    --cap-add=NET_ADMIN \
+    --device=/dev/net/tun \
+    ${VOLN_MNT} ${SHARED_MNT} \
+    ${DOCKER_IMG_NAME} \
     ${args}
 else
   docker exec -it \
